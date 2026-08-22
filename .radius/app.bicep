@@ -5,6 +5,12 @@ param environment string
 @secure()
 param postgresPassword string
 
+@secure()
+param registryPassword string
+
+@secure()
+param registryUsername string
+
 resource votingApp 'Radius.Core/applications@2025-08-01-preview' = {
   name: 'my-example-voting-app'
   properties: {
@@ -19,7 +25,7 @@ resource postgresDb 'Radius.Data/postgreSqlDatabases@2025-08-01-preview' = {
     application: votingApp.id
     codeReference: 'docker-compose.yml#L64'
     size: 'S'
-    database: 'postgres'
+    database: 'votes'
     username: 'postgres'
     password: postgresPassword
   }
@@ -32,6 +38,22 @@ resource redisCache 'Radius.Data/redisCaches@2025-08-01-preview' = {
     application: votingApp.id
     codeReference: 'docker-compose.yml#L54'
     size: 'S'
+  }
+}
+
+resource registryCreds 'Radius.Security/secrets@2025-08-01-preview' = {
+  name: 'radius-ghcr-registry-creds'
+  properties: {
+    environment: environment
+    application: votingApp.id
+    data: {
+      password: {
+        value: registryPassword
+      }
+      username: {
+        value: registryUsername
+      }
+    }
   }
 }
 
@@ -49,6 +71,9 @@ resource resultImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
       ]
     }
   }
+  dependsOn: [
+    registryCreds
+  ]
 }
 
 resource voteImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
@@ -65,6 +90,9 @@ resource voteImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
       ]
     }
   }
+  dependsOn: [
+    registryCreds
+  ]
 }
 
 resource workerImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
@@ -81,6 +109,9 @@ resource workerImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
       ]
     }
   }
+  dependsOn: [
+    registryCreds
+  ]
 }
 
 resource resultContainer 'Radius.Compute/containers@2025-08-01-preview' = {
