@@ -67,7 +67,7 @@ resource resultImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
     application: votingApp.id
     codeReference: 'result/Dockerfile'
     build: {
-      source: 'git::https://github.com/nithyatsu/my-example-voting-app.git//result?ref=49edfafb3b0c1100d0ed0280c2c88ef3fd881f35'
+      source: 'git::https://github.com/nithyatsu/my-example-voting-app.git//result?ref=ad6b9d46331695db359eab487e9b592d71e27f46'
       platforms: [
         'linux/amd64'
       ]
@@ -85,7 +85,7 @@ resource voteImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
     application: votingApp.id
     codeReference: 'vote/Dockerfile'
     build: {
-      source: 'git::https://github.com/nithyatsu/my-example-voting-app.git//vote?ref=49edfafb3b0c1100d0ed0280c2c88ef3fd881f35'
+      source: 'git::https://github.com/nithyatsu/my-example-voting-app.git//vote?ref=ad6b9d46331695db359eab487e9b592d71e27f46'
       platforms: [
         'linux/amd64'
       ]
@@ -103,7 +103,7 @@ resource workerImage 'Radius.Compute/containerImages@2025-08-01-preview' = {
     application: votingApp.id
     codeReference: 'worker/Dockerfile'
     build: {
-      source: 'git::https://github.com/nithyatsu/my-example-voting-app.git//worker?ref=49edfafb3b0c1100d0ed0280c2c88ef3fd881f35'
+      source: 'git::https://github.com/nithyatsu/my-example-voting-app.git//worker?ref=ad6b9d46331695db359eab487e9b592d71e27f46'
       platforms: [
         'linux/amd64'
       ]
